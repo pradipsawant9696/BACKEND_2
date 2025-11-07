@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const usermodel=require("./users");
 
+
 /* GET home page. */
 router.get('/', function(req, res) {
   res.render("index");
@@ -60,8 +61,56 @@ router.get("/delete",async function(req,res){
 });
 
 
+// session creation code
+
+router.get("/ban", function(req,res){
+   req.session.ban=true;
+   res.render("index");
+});
 
 
+
+
+router.get("/checkban", function(req,res){
+  if(req.session.ban===true){
+      res.send("your band")
+  }else{
+      res.send("your not band")
+  }
+  
+});
+
+router.get("/unban",function(req,res){
+  req.session.destroy(function(err){
+    if(err)throw err;
+    res.send("ban removed");
+  })
+})
+
+
+
+
+// creating the cookies
+
+router.get("/c",function(req,res){
+  res.cookie("age",35);
+  res.render("index");
+})
+
+router.get("/read",function(req,res){
+ console.log(req.cookies);
+ res.send("check");
+  
+})
+
+
+
+// deleting the cookies
+
+router.get("/deletec",function(req,res){
+  res.clearCookie("age");
+  res.send("clear ho gayi");
+})
 
 
 module.exports = router;
